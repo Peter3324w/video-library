@@ -1,0 +1,281 @@
+/* ── The app's two screens ──────────────────────────────────────────────────
+   This is a desktop window, not a phone, so it has two layouts rather than
+   a ladder of them. A mobile app, when it comes, is a separate build and not a
+   third breakpoint here.
+
+     WIDE     >= 1680px   the design as drawn: side rails sit beside content,
+                          bentos run four across.
+     COMPACT   940-1679   rails stack under the content they belonged to and
+                          bentos halve. 940px is the floor because that is
+                          BrowserWindow's minWidth (src/main/index.js).
+
+   1680 is not a round number picked for looks. The friend profile carries a
+   336px rail beside a four-column bento; below ~1700px the covers in its Top
+   games cell fall under 110px and start reading as slivers. Where a component
+   genuinely survives further down — the Stats KPI row does — it keeps its own
+   narrower breakpoint INSIDE the compact tier rather than being dragged up to
+   this one. Two screens is the layout contract, not a ban on a component
+   knowing its own limits.
+
+   Anything below 940px cannot happen in this app. Rules written for it are
+   dead, and were removed on 2026-09-03. */
+
+:root {
+  --bg: #000000;
+  --surface: #0c0c0c;
+  --card: #121212;
+  --card-2: #1a1a1a;
+  /* The two materials everything else is made of, as bare channels so they
+     can take an alpha.
+
+     --wash-rgb is the app's chrome: every card fill, hover, hairline and inset
+     sheen is this colour at some alpha. It was the literal rgba(255,255,255,α)
+     in 237 declarations, which is why a themed page still had grey containers
+     sitting on it — a pure-white wash over a warm ground reads cool, and over
+     a cool ground reads warm, so containers were the one thing that could
+     never join a theme.
+
+     --text-rgb is the same idea for type: the two dozen places that dim text
+     or a glyph with an alpha rather than reaching for --muted. */
+  --wash-rgb: 255 255 255;
+  --text-rgb: 255 255 255;
+  --stroke: rgb(var(--wash-rgb) / 0.1);
+  --stroke-soft: rgb(var(--wash-rgb) / 0.06);
+
+  /* --accent is the colour of a CHOSEN thing: the active nav item, an .on tab
+     or chip, a primary button. It was white and reached nine declarations while
+     46 hardcoded #fff did the actual work; those are on it now.
+     --on-accent is what sits on top of that fill — the text and the glyph.
+     -soft is a second line inside the same pill; -mute is the inner detail of
+     an iconsax Bulk icon, which draws two tones and needs both. */
+  --accent: #ffffff;
+  --accent-2: #ffffff;
+  --on-accent: #000000;
+  --on-accent-soft: rgba(0, 0, 0, 0.55);
+  --on-accent-mute: #8a8a8a;
+  --accent-hover: #e6e6e6;
+
+  /* --data is the colour a chart draws in, kept separate from --accent because
+     a bar is not a button and a theme may want to say so. --data-rgb is the
+     same colour as bare channels, for the ramps: the heatmap's five levels and
+     the gradient fills need rgb(var(--data-rgb) / .36), which is the one form
+     that takes an alpha without color-mix or a second variable per step. */
+  --data: #ffffff;
+  --data-rgb: 255 255 255;
+
+  --text: #ffffff;
+  --text-2: #f5f5f5;
+  --muted: #9a9a9a;
+  /* Green is not only .trend.up — it is the app's "alive" colour, on the
+     playing pulse, the live chip, the online dot, the friend-request badge and
+     every done/connected state. It keeps that job in every theme; what moves
+     is which green, so it belongs to the family it sits in rather than being
+     one fixed lime on three different grounds. Channels again, because 14
+     declarations wash it at an alpha. --on-green is what rides on the solid
+     fill: the nav badge's count. */
+  --green-rgb: 74 222 128;
+  --green: rgb(var(--green-rgb));
+  --on-green: #06140b;
+  /* Same treatment as green, and for the same reason: 12 declarations washed
+     it at an alpha, in THREE different reds — 255,90,122 here, 229,72,77 on
+     .lib-danger and 248,113,113 on the diagnostics count — while all three
+     rules coloured their text with var(--danger). Those are one colour now.
+     --on-danger is the white that rides the solid fill. */
+  --danger-rgb: 255 90 122;
+  --danger: rgb(var(--danger-rgb));
+  --on-danger: #ffffff;
+
+  /* Secondary controls — a pane of dark glass, not a grey wash.
+
+     rgba(255,255,255,.07) was the old fill and it lightened the button, which is
+     what made Decline and Add look like a different species of control. Fully
+     transparent fixed that but left them with no body at all. Black at 35%
+     darkens instead: over the page's own black it is all but invisible on its
+     own, so the SHEEN is what does the work — --glass-glow is the same inset
+     highlight .kpi and .stats-card already carry, which is how every other
+     surface in this app reads as glass rather than as paint. Over artwork —
+     a hero, a cover — the black actually tints and it behaves like glass there
+     too.
+
+     Deliberately no backdrop-filter: blur over flat black buys nothing and this
+     is on forty-odd buttons. */
+  --glass: rgba(0, 0, 0, 0.35);
+  --glass-strong: rgba(0, 0, 0, 0.55);
+  --glass-glow: inset 0 0 20px rgb(var(--wash-rgb) / 0.03), inset 0 1px 0 rgb(var(--wash-rgb) / 0.05);
+
+  --radius: 16px;
+}
+
+/* ── Themes ────────────────────────────────────────────────────────────────
+   A theme moves the neutral ramp and nothing else. Strokes, washes and glass
+   stay exactly as they are, because they are white and black at low alpha:
+   they re-tint themselves over whatever floor is underneath. That is the whole
+   reason a dark theme costs seven values and a light one costs ~560 — a light
+   floor would need every one of those 257 rgba(255,255,255,…) rules inverted.
+
+   --green and --danger do NOT move. Green means .trend.up in every theme;
+   making the one colour with a fixed meaning the least predictable thing on
+   the page would be exactly backwards. --accent stays white for the same kind
+   of reason: a selected pill is white in all three, and the accent token only
+   reaches 11 declarations anyway — the 144 solid #fff literals are what
+   actually draw the selected states, and giving a theme a real accent means
+   tokenising those first.
+
+   Rule for adding one: only the values below, and nothing outside this block.
+   If a theme needs a rule changed somewhere else, that rule is the bug — it is
+   a literal that should have been a token, and it will break the next theme
+   too. That is exactly how this list grew: the first pass moved seven values
+   and the app barely changed, because --surface reached one declaration and
+   --card reached three while 93 hardcoded #fff/#000 drew every selected state
+   in the app. */
+:root[data-theme='graphite'] {
+  /* Warm near-black. Same contrast as Midnight, but #000 on #fff is the most
+     clinical pair available and the warmth is most of what reads as chosen
+     rather than default. */
+  --bg: #0a0908;
+  --surface: #12100e;
+  --card: #171512;
+  --card-2: #201d19;
+  --text: #faf8f5;
+  --text-2: #efebe6;
+  --muted: #9a9289;
+  --wash-rgb: 255 238 220;
+  --text-rgb: 250 248 245;
+  --stroke: rgb(var(--wash-rgb) / 0.11);
+  --stroke-soft: rgb(var(--wash-rgb) / 0.065);
+  --accent: #e8b075;
+  --accent-2: #e8b075;
+  --on-accent: #1a1206;
+  --on-accent-soft: rgba(26, 18, 6, 0.6);
+  --on-accent-mute: #8f6538;
+  --accent-hover: #f2c491;
+  --data: #e8b075;
+  --data-rgb: 232 176 117;
+  /* A leaf green, hue pulled toward the amber it now shares a page with. */
+  --green-rgb: 142 203 106;
+  --on-green: #101806;
+}
+
+:root[data-theme='rose'] {
+  /* Moss's problem again, on the other side of the wheel. --danger is a rose
+     (#ff5a7a, hue ~348) and a pink accent lands within twenty degrees of it —
+     so "delete" and "selected" would have been the same colour, which is worse
+     than bland.
+
+     The accent takes the magenta end at hue ~330 and --danger is pushed to a
+     true red at hue 0 here and only here. Red still means danger; it just
+     stops being the same pink as the thing you clicked. --green goes mint so
+     that alive doesn't fight the accent either. */
+  --bg: #0b0709;
+  --surface: #140d11;
+  --card: #1a1116;
+  --card-2: #241820;
+  --text: #f9f2f5;
+  --text-2: #ece0e6;
+  --muted: #9c8b93;
+  --wash-rgb: 255 225 240;
+  --text-rgb: 249 242 245;
+  --stroke: rgb(var(--wash-rgb) / 0.11);
+  --stroke-soft: rgb(var(--wash-rgb) / 0.065);
+  --accent: #f472b6;
+  --accent-2: #f472b6;
+  --on-accent: #1a0610;
+  --on-accent-soft: rgba(26, 6, 16, 0.6);
+  --on-accent-mute: #7a3559;
+  --accent-hover: #f894c9;
+  --data: #f472b6;
+  --data-rgb: 244 114 182;
+  --green-rgb: 63 217 168;
+  --on-green: #04140e;
+  --danger-rgb: 255 92 92;
+}
+
+:root[data-theme='moss'] {
+  /* A forest floor. The one theme where the accent and --green are the same
+     family, which is a problem the others don't have: green already means
+     alive here — the playing pulse, the live chip, the online dot — and an
+     accent sitting on the same hue would quietly take that meaning over.
+
+     So they are pulled apart deliberately. The accent is a lime-leaf at hue
+     ~95 and --green is a mint at ~166, about seventy degrees between them,
+     which is enough to read as two colours rather than one. Form does the rest
+     of the work: a chosen thing is a filled pill, an alive thing is a dot or a
+     chip, and those were never confusable to begin with. */
+  --bg: #060b07;
+  --surface: #0b120d;
+  --card: #101913;
+  --card-2: #182419;
+  --text: #f1f7f2;
+  --text-2: #e3ece5;
+  --muted: #8a9a8e;
+  --wash-rgb: 210 255 220;
+  --text-rgb: 241 247 242;
+  --stroke: rgb(var(--wash-rgb) / 0.11);
+  --stroke-soft: rgb(var(--wash-rgb) / 0.065);
+  --accent: #8ce563;
+  --accent-2: #8ce563;
+  --on-accent: #0a1405;
+  --on-accent-soft: rgba(10, 20, 5, 0.6);
+  --on-accent-mute: #476b30;
+  --accent-hover: #a3ed80;
+  --data: #8ce563;
+  --data-rgb: 140 229 99;
+  --green-rgb: 52 214 173;
+  --on-green: #04140f;
+}
+
+:root[data-theme='deep'] {
+  /* The same move, cool. Also the one theme where the .recap-* story slides
+     stop looking like they wandered in from another app — they are already a
+     navy world (#05060a grounds, #5b7cfa gradients). */
+  --bg: #070a12;
+  --surface: #0c111c;
+  --card: #111726;
+  --card-2: #182033;
+  --text: #f2f5fb;
+  --text-2: #e4e9f5;
+  --muted: #8a93a8;
+  --wash-rgb: 190 210 255;
+  --text-rgb: 242 245 251;
+  --stroke: rgb(var(--wash-rgb) / 0.12);
+  --stroke-soft: rgb(var(--wash-rgb) / 0.07);
+  --accent: #7c9cff;
+  --accent-2: #7c9cff;
+  --on-accent: #050a1c;
+  --on-accent-soft: rgba(5, 10, 28, 0.62);
+  --on-accent-mute: #3f5288;
+  --accent-hover: #9bb3ff;
+  --data: #7c9cff;
+  --data-rgb: 124 156 255;
+  /* The same green pushed the other way, to the emerald end, so it sits with
+     the periwinkle instead of cutting across it. */
+  --green-rgb: 63 217 168;
+  --on-green: #04140e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+.app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+}
+

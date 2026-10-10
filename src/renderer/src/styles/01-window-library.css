@@ -1,0 +1,103 @@
+/* Window controls — floating overlay, top-right (sits over the hero artwork on Home) */
+.window-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  z-index: 9999; /* stay clickable above the fullscreen browser overlay */
+  -webkit-app-region: no-drag;
+  /* frosted backdrop so page content stays legible scrolling underneath */
+  background: rgba(10, 10, 12, 0.2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.win-btn {
+  width: 46px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: rgb(var(--text-rgb) / 0.9);
+  font-size: 12px;
+  cursor: pointer;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  transition: background 0.15s, color 0.15s;
+}
+.win-btn:hover {
+  background: rgb(var(--wash-rgb) / 0.12);
+  color: var(--text);
+}
+.win-close:hover {
+  background: var(--danger);
+  color: var(--on-danger);
+}
+
+/* Library footer — destructive remove-all, tucked away */
+.lib-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--stroke);
+}
+.lib-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border: 1px solid var(--stroke);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.lib-danger:hover {
+  color: var(--danger);
+  border-color: rgb(var(--danger-rgb) / 0.5);
+  background: rgb(var(--danger-rgb) / 0.08);
+}
+.lib-footer-note {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+
+/* A band across the top of the window that you can take hold of.
+   The window is frameless (frame: false), so dragging only happens where the
+   CSS says it does — and the ONLY other drag region in the app is .brand, the
+   logo block in the sidebar. Everything else is explicitly no-drag, which left
+   nothing to grab along the top edge.
+
+   This was briefly a real 36px row in .app's flex column instead. That row could
+   not swallow anything, which was the point — but it pushed the sidebar and the
+   page down by 36px, and the only thing sitting in the reserved space was the
+   window buttons at the far right. Once the ended-trial banner (the one element
+   it was protecting) was removed, what was left was a black band across the top
+   of the app with nothing in it.
+
+   So: back to an overlay, at 26px, which is exactly .page's top padding — at
+   rest the strip lies over empty space and covers no content at all.
+
+   The z-index is deliberately LOW rather than high. It has to beat .page
+   (z-index 1) to be reachable, but stay under .window-controls (9999) so the
+   buttons still click, and under .settings-top (5) so Settings' sticky header —
+   the only sticky thing in the app — is never swallowed by it. */
+/* Stops 190px short of the right edge, which is where the chrome starts: the
+   bell sits at right:138px and is 46px wide, the window buttons run from there
+   to the edge. Both mark themselves no-drag and both outrank this on z-index,
+   but a drag region is resolved by the compositor rather than by painting
+   order, and the bell is 36px tall against this strip's 26 — so its top 26px
+   were being swallowed and only a ~10px sliver at the bottom took a click.
+   Not overlapping the chrome at all is the version with no ambiguity in it. */
+.drag-strip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 190px;
+  height: 26px;
+  z-index: 2;
+  -webkit-app-region: drag;
+}

@@ -1,0 +1,321 @@
+/* Layout */
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.sidebar {
+  width: 224px;
+  flex-shrink: 0;
+  position: relative;
+  isolation: isolate;
+  padding: 6px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.2s ease;
+}
+/* Experimental: blurred bleed of the featured cover behind the nav */
+.sidebar-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 440px;
+  overflow: hidden;
+  opacity: 0.22;
+  z-index: -1;
+  pointer-events: none;
+}
+.sidebar-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, transparent 0%, var(--bg) 85%);
+}
+.sidebar-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* merged total-time + recent card */
+.sc-divider {
+  height: 1px;
+  background: var(--stroke);
+  margin: 13px -14px;
+}
+.sidebar-card .panel-head {
+  font-size: 16px;
+}
+
+/* Collapse toggle */
+.collapse-btn {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: background 0.15s, color 0.15s;
+}
+.collapse-btn:hover {
+  background: rgb(var(--wash-rgb) / 0.08);
+  color: var(--text);
+}
+
+/* Collapsed sidebar: icon-only rail */
+.sidebar.collapsed {
+  width: 72px;
+  padding: 6px 12px 18px;
+}
+.sidebar.collapsed .brand {
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0 2px;
+  align-items: center;
+}
+.sidebar.collapsed .brand-text {
+  display: none;
+}
+.sidebar.collapsed .collapse-btn {
+  margin-left: 0;
+}
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  gap: 0;
+  padding: 11px 0;
+}
+.sidebar.collapsed .nav-label {
+  display: none;
+}
+.sidebar.collapsed .sidebar-divider,
+.sidebar.collapsed .sidebar-summary,
+.sidebar.collapsed .sidebar-panels {
+  display: none;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 6px 2px;
+  margin-bottom: 26px;
+  -webkit-app-region: drag;
+}
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.brand-name {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+.brand-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-item:hover {
+  background: rgb(var(--wash-rgb) / 0.05);
+  color: var(--text);
+}
+/* Pending-friend-request count on the Friends nav item. */
+.nav-badge {
+  margin-left: auto;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--green);
+  color: var(--on-green);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.sidebar.collapsed .nav-badge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  margin-left: 0;
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  font-size: 10px;
+  padding: 0 4px;
+}
+.nav-item.active {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: none;
+}
+.nav-item.active:hover {
+  background: var(--accent-hover);
+  color: var(--on-accent);
+}
+/* ── THE FLOOR for the white pill ──────────────────────────────────────────
+   This bug has been found three separate times — the Upgrade label, the Buy
+   chip, and the account row's avatar and chevron — and it is always the same
+   shape: the pill flips to white, and anything on it that named a light colour
+   for itself disappears into the background. The row still looks fine, which is
+   why it reads as "the text is missing" rather than as a colour bug.
+
+   So the default is now stated instead of assumed: everything inside an active
+   pill is black unless a more specific rule deliberately says otherwise. The
+   existing overrides all sit at (0,3,0) and still win — .nav-upgrade.active
+   .nav-label, .nav-upgrade.active .nav-buy, .nav-item.active .acct-avatar.
+
+   Two things this CANNOT save, so they keep their own rules:
+   - anything with a light BACKGROUND of its own. Colour cannot rescue a white
+     chip on white; .nav-buy has to invert its fill (16-upgrade.css).
+   - siblings. The account chevron is positioned over the pill rather than
+     inside it, so no descendant selector reaches it (08-account-friends.css). */
+.nav-item.active * {
+  color: var(--on-accent);
+}
+/* Carries its own green fill, so it wants the near-black that goes with THAT
+   colour rather than --on-accent — and it stays legible whether the row under
+   it is selected or not. */
+.nav-item.active .nav-badge {
+  color: var(--on-green);
+}
+/* Bulk icon on the active nav item, whose pill is --accent: the base shape
+   takes --on-accent and the inner detail the muted version of it. iconsax Bulk
+   draws the large shape at opacity .4 and the small detail solid — we flip
+   that, so the icon reads as one dark glyph with minor touches lifted. */
+.nav-item.active .nav-icon path {
+  fill: var(--on-accent-mute);
+}
+.nav-item.active .nav-icon path[opacity] {
+  fill: var(--on-accent);
+  opacity: 1;
+}
+/* Achievements (Cup) puts its dominant shape (the bowl) on the SOLID path, so keep the
+   natural orientation there: solid = black, faded layer (base + star) = gray.
+   Chart2/Home/etc. keep the flip above, where the big shape is the faded path. */
+.nav-achievements.active .nav-icon path {
+  fill: var(--on-accent);
+}
+.nav-achievements.active .nav-icon path[opacity] {
+  fill: var(--on-accent-mute);
+  opacity: 1;
+}
+/* The glyphs carry the theme; the labels stay muted. The sidebar is on screen
+   on every page, so it is the one place an accent has to be legible without
+   anything being selected — otherwise the only coloured thing in the app is
+   whichever row you happen to be standing on.
+
+   Specificity does the state handling on its own, which is why there are no
+   extra rules here. `.nav-item.active *` is (0,2,0) and beats this (0,1,0), so
+   a selected row's glyph still inverts to --on-accent; `.signin-btn.connected
+   .nav-icon` is (0,3,0), so a connected account's glyph stays green. On hover
+   the label lifts to --text and the glyph stays accent, which is the right way
+   round: the row is reacting, the glyph is identifying. */
+.nav-icon {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.nav-settings {
+  margin-top: auto;
+}
+.sidebar-summary {
+  background: transparent;
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: inset 0 0 24px rgb(var(--wash-rgb) / 0.025), inset 0 1px 0 rgb(var(--wash-rgb) / 0.03);
+}
+/* divider line between the nav options and the info group (total time + sessions) */
+.sidebar-divider {
+  height: 1px;
+  background: var(--stroke);
+  flex-shrink: 0;
+}
+.summary-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+}
+.summary-label svg {
+  color: var(--text-2);
+  flex-shrink: 0;
+}
+.summary-value {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+.summary-playing {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--green);
+  margin-top: 8px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: transparent;
+  border: 1px solid var(--stroke-soft);
+  border-top: none;
+  border-bottom: none;
+  border-radius: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-left: 0;
+  margin-right: 0;
+}
+.page {
+  position: relative;
+  z-index: 1;
+  padding: 26px 32px 40px;
+}
+

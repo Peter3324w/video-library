@@ -1,0 +1,1059 @@
+/* Settings */
+.settings-card {
+  background: transparent;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  max-width: 520px;
+  box-shadow: inset 0 0 24px rgb(var(--wash-rgb) / 0.025), inset 0 1px 0 rgb(var(--wash-rgb) / 0.03);
+}
+.settings-top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  margin: -26px -30px 22px;
+  padding: 18px 30px 14px;
+  border-bottom: 1px solid var(--stroke);
+}
+.settings-top .page-head {
+  margin-bottom: 16px;
+  padding-top: 0;
+}
+.settings-top .settings-tabs {
+  margin-bottom: 0;
+}
+.settings-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 26px;
+}
+/* inline-flex so a tab can carry a glyph. This rule is shared with Settings and
+   Downloads, whose tabs are text only: a flex row of one text node lays out
+   exactly as the block did, so they are untouched. The trimmed left padding is
+   the part that would have shown — 12/15 on a text-only pill reads as
+   off-centre — so it is scoped to the tabs that actually have an icon. */
+.settings-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border: 1px solid var(--stroke);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.settings-tab:has(svg) {
+  padding-left: 12px;
+}
+.settings-tab svg {
+  flex-shrink: 0;
+}
+.settings-tab:hover {
+  color: var(--text);
+}
+.settings-tab.on {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+.settings-group {
+  max-width: 520px;
+}
+.settings-group + .settings-group {
+  margin-top: 34px;
+}
+.settings-group-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.settings-group .settings-card + .settings-card {
+  margin-top: 12px;
+}
+.settings-card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.key-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.key-input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 10px 13px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.key-input:focus {
+  border-color: rgb(var(--wash-rgb) / 0.3);
+}
+/* Password field with a show/hide eye toggle */
+.pw-field {
+  position: relative;
+  display: flex;
+}
+.pw-field .key-input {
+  flex: 1;
+  padding-right: 40px;
+}
+.pw-eye {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+.pw-eye:hover {
+  color: var(--text);
+  background: rgb(var(--wash-rgb) / 0.06);
+}
+.key-status {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--green);
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--stroke);
+}
+.setting-row:last-child {
+  border-bottom: none;
+}
+/* A row whose control is wider than the half of .settings-card left over after
+   the label. Five theme pills want ~580px and the card is capped at 520, so
+   side-by-side meant the control won outright: the description was crushed to
+   a one-word column and the pills overflowed the card anyway. Stacked, the
+   text gets the full width and the control gets a line of its own to wrap on. */
+.setting-row.stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.setting-row.stack .theme-picker,
+.setting-row.stack .accent-picker {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.setting-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.toggle {
+  flex-shrink: 0;
+  width: 46px;
+  height: 26px;
+  border-radius: 20px;
+  border: none;
+  background: rgb(var(--wash-rgb) / 0.12);
+  cursor: pointer;
+  padding: 3px;
+  transition: background 0.18s;
+}
+.toggle.on {
+  background: var(--accent);
+}
+.toggle-knob {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--text);
+  transform: translateX(0);
+  transition: transform 0.18s, background 0.18s;
+}
+.toggle.on .toggle-knob {
+  transform: translateX(20px);
+  background: var(--on-accent);
+}
+
+/* Playing badge + pulse */
+.badge-playing {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(8, 20, 12, 0.82);
+  color: var(--green);
+  border: 1px solid rgb(var(--green-rgb) / 0.4);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+.pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgb(var(--green-rgb) / 0.7);
+  animation: pulse 1.6s infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(var(--green-rgb) / 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgb(var(--green-rgb) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(var(--green-rgb) / 0);
+  }
+}
+
+/* Cover picker modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 5, 16, 0.66);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fade 0.15s ease;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+.modal {
+  position: relative;
+  width: min(760px, 92vw);
+  height: min(640px, 86vh);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--stroke);
+}
+.modal-head h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+/* Transparent with a hairline, like .fb-go and every other icon chip. The
+   danger hover stays — that one is saying something. */
+.modal-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--stroke);
+  background: var(--glass);
+  box-shadow: var(--glass-glow);
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close:hover {
+  background: var(--danger);
+  color: var(--on-danger);
+}
+.modal-search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 18px 22px;
+}
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--text);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.link-btn:hover {
+  color: var(--text);
+}
+.link-btn {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* Recovery codes (Account settings) */
+.rec-section {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--stroke-soft);
+}
+.rec-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.rec-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.rec-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.rec-code {
+  font-family: 'Cascadia Code', Consolas, monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid var(--stroke);
+  border-radius: 9px;
+  background: rgb(var(--wash-rgb) / 0.03);
+  color: var(--text);
+}
+.rec-actions {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rec-warn {
+  font-size: 12px;
+  color: var(--danger);
+}
+.modal-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgb(var(--wash-rgb) / 0.05);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 0 14px;
+  color: var(--muted);
+}
+.modal-input-wrap:focus-within {
+  border-color: var(--accent);
+}
+.modal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 11px 0;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+}
+/* Artwork picker tabs */
+.modal-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 14px 22px 0;
+}
+.modal-tab {
+  padding: 8px 14px;
+  border: 1px solid var(--stroke);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.modal-tab:hover {
+  color: var(--text);
+}
+.modal-tab.on {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+.modal-hint {
+  margin: 0 22px;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  background: rgb(var(--wash-rgb) / 0.04);
+  border: 1px solid var(--stroke);
+  border-radius: 9px;
+}
+.modal-hint.hint-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 10px 10px 12px;
+}
+.modal-hint.hint-row span {
+  flex: 1;
+  line-height: 1.5;
+}
+.hint-btn {
+  flex-shrink: 0;
+  gap: 6px;
+}
+.modal-results {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-auto-rows: min-content;
+  align-content: start;
+  gap: 16px;
+  padding: 16px 18px 18px 22px;
+  overflow-y: auto;
+}
+.modal-results.wide {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.modal-results::-webkit-scrollbar {
+  width: 10px;
+}
+.modal-results::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-results::-webkit-scrollbar-thumb {
+  background: rgb(var(--wash-rgb) / 0.16);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.modal-results::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--wash-rgb) / 0.28);
+  background-clip: padding-box;
+}
+.modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--stroke);
+}
+.modal-foot-hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+.modal-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 30px 0;
+}
+
+/* ---------- Import from a launcher ---------- */
+.launcher-modal {
+  max-width: 560px;
+}
+.lx-list {
+  margin-top: 4px;
+  padding: 0 22px;
+}
+.lx-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--stroke-soft);
+}
+.lx-row:last-child {
+  border-bottom: none;
+}
+/* A launcher we can't read yet stays listed rather than disappearing — it
+   explains its own absence, which a missing button can't. */
+.lx-row.off {
+  opacity: 0.42;
+}
+.lx-ic {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+}
+.lx-tx {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.lx-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+.lx-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.lx-done {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--green);
+}
+.lx-result {
+  margin: 14px 22px 0;
+}
+.lx-note {
+  margin: 18px 22px 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--stroke-soft);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ---------- Diagnostics ---------- */
+.diag-rows {
+  margin: 16px 0 4px;
+}
+.diag-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--stroke-soft);
+}
+.diag-row:last-child {
+  border-bottom: none;
+}
+/* A dot, not an icon: three states need to be told apart at a glance without
+   reading, and colour alone does that where a tick/cross pair does not — an
+   amber cross would be a contradiction. */
+.diag-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.diag-dot.bad {
+  background: var(--danger);
+}
+.diag-dot.idle {
+  background: rgb(var(--wash-rgb) / 0.25);
+}
+.diag-tx {
+  flex: 1;
+  min-width: 0;
+}
+.diag-label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.diag-value {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.diag-hint {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--danger);
+  line-height: 1.5;
+}
+/* A caution rather than a failure — red here would send people hunting for a
+   problem that may not exist. */
+.diag-hint.soft {
+  color: var(--muted);
+}
+.diag-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.diag-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.diag-logline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--stroke-soft);
+}
+.diag-logline .link-btn {
+  margin-top: 0;
+}
+.diag-count {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.diag-count.bad {
+  color: var(--danger);
+  background: rgb(var(--danger-rgb) / 0.12);
+}
+.diag-count.warn {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+}
+/* Capped and scrollable: 250 entries would otherwise push every setting below
+   it off the page whenever the log is open. */
+.diag-log {
+  margin-top: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: rgb(var(--wash-rgb) / 0.02);
+}
+.diag-entry {
+  display: flex;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 11.5px;
+  font-family: 'Cascadia Code', Consolas, monospace;
+  line-height: 1.5;
+  color: var(--muted);
+  border-bottom: 1px solid var(--stroke-soft);
+}
+.diag-entry:last-of-type {
+  border-bottom: none;
+}
+.diag-entry.error .diag-msg {
+  color: var(--danger);
+}
+.diag-entry.warn .diag-msg {
+  color: #fbbf24;
+}
+.diag-time {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.diag-area {
+  flex-shrink: 0;
+  width: 62px;
+  opacity: 0.7;
+}
+.diag-msg {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+.diag-empty {
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 6px 0;
+}
+
+/* ---------- Check directory ---------- */
+.checkdir-modal {
+  max-width: 640px;
+}
+.cd-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 22px 0;
+}
+.cd-group {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--muted);
+  margin: 16px 0 6px;
+}
+.cd-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  padding: 11px 12px;
+  border: 1px solid var(--stroke);
+  background: transparent;
+  border-radius: 10px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cd-row + .cd-row {
+  margin-top: 8px;
+}
+.cd-row:hover:not(.on) {
+  background: rgb(var(--wash-rgb) / 0.05);
+  border-color: rgb(var(--wash-rgb) / 0.3);
+}
+/* The file currently in use isn't a choice to make again — it's the reference
+   point for the others, so it reads as stated rather than clickable. */
+.cd-row.on {
+  border-color: var(--green);
+  cursor: default;
+}
+.cd-row:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.cd-tx {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cd-name {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.cd-path {
+  font-size: 11.5px;
+  color: var(--muted);
+  word-break: break-all;
+  line-height: 1.4;
+}
+.cd-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.cd-badge {
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  background: rgb(var(--green-rgb) / 0.12);
+}
+.cd-msg {
+  margin: 12px 22px 0;
+}
+.cd-note {
+  margin: 14px 22px 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--stroke-soft);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* Theme picker (Settings → General). The buttons are .btn-soft so they carry
+   the app's glass secondary recipe and invert to a white pill when selected,
+   exactly like every other chosen thing in the app — a picker is not a reason
+   to grow a fourth kind of button.
+
+   The chip's ring is a mid grey rather than a token because it has to hold its
+   edge on both the dark glass and the white .on pill, and neither --stroke nor
+   its inverse does both. */
+.theme-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.theme-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+}
+.theme-chip {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(127, 127, 127, 0.45);
+  flex-shrink: 0;
+}
+
+/* Accent picker (Settings → General). The chips are the same 16px dot the theme
+   picker uses, so the two rows read as one control stacked twice rather than as
+   two different ideas about what a colour swatch looks like. */
+.accent-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.accent-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.accent-chip {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(127, 127, 127, 0.45);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  color: var(--on-accent);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.accent-chip:hover {
+  transform: scale(1.1);
+}
+/* The selected chip gets a ring held off its own edge, not a border swap: a
+   border would change the swatch's size and make the row jump. */
+.accent-chip.on {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+.accent-auto {
+  width: auto;
+  min-width: 26px;
+  padding: 0 10px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--glass);
+  box-shadow: var(--glass-glow);
+  border: 1px solid var(--stroke);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+/* Named, and shaped like a control rather than a swatch — it is the way OUT of
+   the row, so it must not look like another thing in it. Sized taller and lit
+   brighter than its neighbours on purpose: it was a thin outline sitting beside
+   five saturated dots, which is the losing side of that contest. */
+.accent-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 14px 0 5px;
+  border-radius: 999px;
+  background: rgb(var(--wash-rgb) / 0.07);
+  box-shadow: var(--glass-glow);
+  border: 1px solid rgb(var(--wash-rgb) / 0.18);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, border-color 0.12s, transform 0.12s;
+}
+/* The whole offer in 22px: every hue at once, with the plus in the middle of
+   it. Nothing else in the row can be more than one colour, so this is the only
+   thing on the line that cannot be mistaken for a preset. */
+.accent-wheel {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: conic-gradient(
+    #ff4d4d,
+    #ffb43d,
+    #ffe94d,
+    #6bff6b,
+    #4de1ff,
+    #6b6bff,
+    #ff4dff,
+    #ff4d4d
+  );
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 0 0 1px rgb(var(--wash-rgb) / 0.25);
+}
+.accent-wheel svg {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.9));
+}
+.accent-auto:hover {
+  color: var(--text);
+  border-color: rgb(var(--wash-rgb) / 0.2);
+}
+.accent-custom:hover,
+.accent-custom.on {
+  background: rgb(var(--wash-rgb) / 0.12);
+  border-color: rgb(var(--wash-rgb) / 0.3);
+}
+.accent-custom:hover {
+  transform: translateY(-1px);
+}
+.accent-auto.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  box-shadow: none;
+}
+
+.accent-panel {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+}
+/* White to the hue across, transparent to black down — the standard square,
+   and the only two-gradient way to get every value of one hue in one surface. */
+.accent-sv {
+  position: relative;
+  height: 132px;
+  border-radius: 8px;
+  cursor: crosshair;
+  touch-action: none;
+  background: linear-gradient(to top, #000, transparent),
+    linear-gradient(to right, #fff, var(--hue));
+}
+.accent-hue {
+  position: relative;
+  height: 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  touch-action: none;
+  background: linear-gradient(
+    to right,
+    #f00 0%,
+    #ff0 17%,
+    #0f0 33%,
+    #0ff 50%,
+    #00f 67%,
+    #f0f 83%,
+    #f00 100%
+  );
+}
+/* One handle for both surfaces. White with a dark outer ring so it stays
+   findable on a yellow as well as on a navy. */
+.accent-dot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+.accent-sv .accent-dot {
+  top: 0;
+  transform: translateY(0);
+}
+/* preview · HEX · R · G · B on one line. The channels are narrow on purpose:
+   three digits is the whole content, and giving them room they don't need is
+   what pushes the hex field down onto its own row. */
+.accent-fields {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+.accent-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+.accent-field-hex {
+  flex: 2.2;
+}
+.accent-field > span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  padding-left: 2px;
+}
+.accent-field input {
+  width: 100%;
+  min-width: 0;
+  background: rgb(var(--wash-rgb) / 0.06);
+  border: 1px solid var(--stroke);
+  border-radius: 7px;
+  padding: 6px 7px;
+  color: var(--text);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+.accent-field input:focus {
+  border-color: var(--accent);
+}
+/* The spinners eat a third of a 44px field and nobody drags a colour one unit
+   at a time. */
+.accent-field input[type='number'] {
+  -moz-appearance: textfield;
+}
+.accent-field input[type='number']::-webkit-inner-spin-button,
+.accent-field input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.accent-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.accent-preview {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--stroke);
+  flex-shrink: 0;
+}
+.accent-foot .btn-soft,
+.accent-foot .btn-primary {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+

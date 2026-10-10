@@ -1,0 +1,14 @@
+# Normalize line endings: LF in the repo, LF on checkout.
+# Without this, cloning/copying the repo on a new Windows machine flips every
+# file to CRLF and git reports the whole tree as modified.
+* text=auto eol=lf
+
+# PowerShell scripts stay CRLF on disk (Windows-only tooling)
+*.ps1 text eol=crlf
+
+# Binaries — never touch
+*.png binary
+*.svg text eol=lf
+*.pdf binary
+*.exe binary
+*.ico binary

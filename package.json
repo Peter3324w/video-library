@@ -1,0 +1,28 @@
+{
+  "name": "video-library",
+  "productName": "Video Library",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline library for the movies and shows you download — resume, history, ratings",
+  "author": "Peter3324w",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "dist": "npm run build && electron-builder --win --config electron-builder.yml"
+  },
+  "dependencies": {
+    "koffi": "^3.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "33.4.11",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^2.3.0",
+    "iconsax-react": "^0.0.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.11"
+  }
+}

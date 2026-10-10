@@ -1,0 +1,449 @@
+/* "New version available" banner — pinned above whatever page is showing */
+.update-banner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 24px 30px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  background: rgb(var(--wash-rgb) / 0.04);
+}
+.ub-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.ub-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.ub-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.ub-text strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #fff);
+}
+.ub-text span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.ub-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.ub-download {
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ub-download:hover {
+  opacity: 0.85;
+}
+.ub-dismiss {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.ub-dismiss:hover {
+  color: var(--text, #fff);
+}
+
+/* Blurred "bleed" of the featured cover behind the middle column */
+.home-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 900px;
+  overflow: hidden;
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+}
+.home-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, transparent 0%, transparent 48%, var(--bg) 96%);
+}
+/* shared cross-fading blurred image layers */
+.bleed-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  filter: blur(55px);
+  transform: scale(1.2);
+  transform-origin: top center;
+  animation: bleedIn 0.6s ease;
+}
+@keyframes bleedIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Page header (Library/Stats/Settings) */
+/* Centre, not flex-start.
+
+   flex-start aligns the right-hand controls to the top of the h1's LINE BOX,
+   and a 30px heading at the default line-height carries around 5px of empty
+   half-leading above its capitals. So the controls were pinned to an edge
+   nobody can see, while the left column carried on below them into the
+   subheading — measured on the Recap header, the segmented control's centre
+   sat 18px higher than the centre of the title-plus-subheading it was supposed
+   to line up with. Centring gives both columns one shared middle.
+
+   The h1's leading is tightened at the same time. Centring alone would still
+   leave the heading's ink sitting low inside its own box, so a few pixels of
+   the drift would survive the fix. */
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  /* clear the floating bell + window controls (36px tall) at the top-right */
+  padding-top: 30px;
+}
+.page-head h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  line-height: 1.2;
+}
+.page-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.head-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  color: var(--text);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 9px 36px 9px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  background-size: 14px;
+  transition: border-color 0.15s;
+}
+.select:hover,
+.select:focus {
+  border-color: rgb(var(--wash-rgb) / 0.28);
+}
+.select option {
+  background: var(--card-2);
+  color: var(--text);
+}
+
+/* Custom dropdown */
+.dd {
+  position: relative;
+}
+.dd-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 150px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 9px 12px 9px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.dd-trigger:hover,
+.dd.open .dd-trigger {
+  border-color: rgb(var(--wash-rgb) / 0.28);
+}
+.dd-chevron {
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+.dd.open .dd-chevron {
+  transform: rotate(180deg);
+}
+.dd-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 11px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  z-index: 30;
+  animation: dd-in 0.14s ease;
+}
+@keyframes dd-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+}
+.dd-opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  white-space: nowrap;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: left;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.dd-opt:hover {
+  background: rgb(var(--wash-rgb) / 0.08);
+  color: var(--text);
+}
+.dd-opt.sel {
+  color: var(--text);
+}
+
+/* ---------------- Add menu ---------------- */
+.addmenu {
+  position: relative;
+}
+.addmenu-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  z-index: 40;
+  animation: dd-in 0.14s ease;
+}
+/* Flipped above the button when it would otherwise run off the bottom of the
+   window — see the measurement in AddMenu. dd-in drops downward into place,
+   which reads backwards on a panel that opens upward, so mirror it rather than
+   change the shared keyframe other dropdowns use. */
+.addmenu-pop.up {
+  top: auto;
+  bottom: calc(100% + 8px);
+  animation: dd-in-up 0.14s ease;
+}
+@keyframes dd-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+/* On the welcome screen the Add button sits in the middle of the page rather
+   than at the end of a toolbar, so right-aligning the panel hangs it off to one
+   side. Centre it on the button there. A negative margin rather than
+   translateX(-50%) because dd-in animates transform: a centring transform would
+   be dropped for the length of the animation and the panel would slide in
+   sideways. */
+.empty-actions .addmenu-pop {
+  right: auto;
+  left: 50%;
+  margin-left: -160px; /* half the panel's 320px */
+}
+.addmenu-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.addmenu-item:hover {
+  background: rgb(var(--wash-rgb) / 0.07);
+}
+.addmenu-ic {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(var(--wash-rgb) / 0.06);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  color: var(--text);
+}
+/* The launcher item shows four brand marks instead of one glyph, so this box
+   becomes a 2x2 rather than a single centred icon. */
+.addmenu-ic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+  gap: 2px;
+  padding: 4px;
+}
+.addmenu-tx {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.addmenu-t {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.addmenu-d {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.dd-check {
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+/* The secondary button, and it was the odd one out: a filled grey panel while
+   every other secondary surface in the app — .fp-tool, .lib-danger, .disc-tab,
+   .settings-tab, .fr-mycode-btn — is transparent over the page's own black with
+   a hairline. That is what made Decline and Add read as a different kind of
+   control from everything around them.
+
+   It takes --glass now: black at 35% with the inset sheen, so it darkens rather
+   than lightens and still has a body. .btn-soft.on inverts to white, which is a
+   selected state and not a secondary one. */
+.btn-soft {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--glass);
+  box-shadow: var(--glass-glow);
+  color: var(--text);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 9px 15px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.btn-soft:hover {
+  background: var(--glass-strong);
+  border-color: rgb(var(--wash-rgb) / 0.2);
+}
+.btn-soft.sm {
+  padding: 6px 11px;
+  font-size: 12px;
+}
+/* "or" divider + Google button on the account sign-in card. */
+.auth-or {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--muted); /* --faint was never defined in any theme */
+  font-size: 11.5px;
+  margin: 2px 0;
+}
+.auth-or::before,
+.auth-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--stroke);
+}
+.auth-or span {
+  padding: 0 10px;
+}
+.google-btn {
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 15px;
+  font-size: 13.5px;
+}
+.btn-primary.sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.btn-ghost {
+  background: rgb(var(--wash-rgb) / 0.05);
+  color: var(--muted);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px;
+  cursor: not-allowed;
+}
+

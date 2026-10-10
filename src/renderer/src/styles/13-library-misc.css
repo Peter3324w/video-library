@@ -1,0 +1,502 @@
+/* ---------------- Toasts ---------------- */
+.toast-stack {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1200;
+  max-width: 360px;
+}
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 13px;
+  padding: 14px 14px 14px 16px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6);
+  animation: toast-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.toast-body {
+  flex: 1;
+}
+.toast-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.toast-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.toast-close {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: none;
+  background: rgb(var(--wash-rgb) / 0.06);
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.toast-close:hover {
+  background: rgb(var(--wash-rgb) / 0.14);
+  color: var(--text);
+}
+
+/* ---------------- Cover picker: applying overlay + key field ---------------- */
+.modal-applying {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  border-radius: 18px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+.hint-key {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hk-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.hk-top span {
+  flex: 1;
+  line-height: 1.5;
+}
+.hk-top .hint-btn {
+  flex-shrink: 0;
+}
+.hk-bottom {
+  display: flex;
+  gap: 8px;
+}
+.hk-input {
+  flex: 1;
+  background: rgb(var(--wash-rgb) / 0.05);
+  border: 1px solid var(--stroke);
+  border-radius: 9px;
+  padding: 9px 12px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+.hk-input:focus {
+  border-color: var(--accent);
+}
+
+/* ---------------- Rename modal ---------------- */
+.rename-pop {
+  width: min(400px, 90vw);
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  animation: dd-in 0.15s ease;
+}
+.rename-pop p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.rename-input {
+  width: 100%;
+  background: rgb(var(--wash-rgb) / 0.05);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 11px 13px;
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+}
+.rename-input:focus {
+  border-color: var(--accent);
+}
+.rename-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* ---------------- Library: uninstalled / history ---------------- */
+.lib-divider {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 34px 0 16px;
+  padding-top: 22px;
+  border-top: 1px solid var(--stroke);
+}
+.lib-divider h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.lib-divider span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.poster-uninstalled .poster-art {
+  filter: grayscale(0.6);
+  opacity: 0.6;
+}
+.poster-uninstalled .poster-name {
+  color: var(--muted);
+}
+.poster-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--stroke);
+  border-radius: 6px;
+  padding: 3px 7px;
+  backdrop-filter: blur(4px);
+}
+/* Where the game came from. Bottom-left, clear of the Uninstalled tag and the
+   favourite star, and quieter than both — provenance, not a status. */
+.poster-source {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(var(--text-rgb) / 0.72);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--stroke);
+  border-radius: 6px;
+  padding: 2px 6px;
+  backdrop-filter: blur(4px);
+}
+.poster-fav {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  color: var(--text);
+}
+
+/* ---------------- Library: bigger grid cards + grid/list toggle ---------------- */
+.poster-grid.lib {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.poster-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  overflow: hidden;
+  line-height: 1.3;
+}
+/* segmented control */
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.seg-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.seg-btn:hover {
+  color: var(--text);
+  background: rgb(var(--wash-rgb) / 0.06);
+}
+.seg-btn.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+/* list view */
+.lib-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lib-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px 8px 8px;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.lib-row:hover {
+  border-color: rgb(var(--wash-rgb) / 0.22);
+}
+.lib-row.sel {
+  border-color: rgb(var(--wash-rgb) / 0.4);
+}
+.lib-row.is-uninstalled {
+  opacity: 0.6;
+}
+.lr-cover {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 60px;
+  border-radius: 7px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--text-rgb) / 0.6);
+  font-size: 13px;
+  font-weight: 800;
+}
+.lr-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.lr-cover .spinner.sm {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-width: 2px;
+}
+.lr-main {
+  flex: 1;
+  min-width: 0;
+}
+.lr-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.lr-name > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lr-tag {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--stroke);
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+/* Source reads quieter than "Uninstalled" — it's provenance, not a status. */
+.lr-tag.lr-src {
+  font-weight: 600;
+  opacity: 0.72;
+}
+.lr-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.lr-play {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid var(--stroke);
+  background: rgb(var(--wash-rgb) / 0.05);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lib-row:hover .lr-play {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+.lib-list .poster-menu {
+  position: relative;
+}
+
+/* ---- Library folders — dropdown in the actions row ---- */
+.fdd .dd-trigger {
+  min-width: 140px;
+}
+.fdd-cur {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fdd-pop {
+  min-width: 208px;
+}
+.fdd-count {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.dd-opt.sel .fdd-count {
+  color: var(--text);
+}
+.fdd-sep {
+  height: 1px;
+  background: var(--stroke-soft);
+  margin: 5px 4px;
+}
+.fdd-row {
+  gap: 8px;
+}
+.fdd-nm {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fdd-actions {
+  display: none;
+  align-items: center;
+  gap: 2px;
+}
+.fdd-row:hover .fdd-actions {
+  display: inline-flex;
+}
+.fdd-row:hover .fdd-count {
+  display: none;
+}
+.fdd-act {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  line-height: 1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.fdd-act:hover {
+  color: var(--text);
+  background: rgb(var(--wash-rgb) / 0.14);
+}
+.fdd-new {
+  color: var(--muted);
+}
+.fdd-new span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.fdd-input {
+  width: 100%;
+  padding: 8px 10px;
+  margin: 1px 0;
+  background: rgb(var(--wash-rgb) / 0.06);
+  border: 1px solid var(--stroke);
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+.fdd-input:focus {
+  border-color: rgb(var(--wash-rgb) / 0.4);
+}
+.lib-folder-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 64px 20px;
+  color: var(--muted);
+}
+.lib-folder-empty h3 {
+  color: var(--text);
+  font-size: 16px;
+}
+.lib-folder-empty p {
+  font-size: 13px;
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+/* poster menu — folders toggle section */
+.pm-sep {
+  height: 1px;
+  background: var(--stroke-soft);
+  margin: 5px 4px;
+}
+.pm-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  padding: 3px 10px 2px;
+}
+.poster-menu-pop button.pm-folder {
+  gap: 6px;
+}
+.poster-menu-pop button.pm-folder.on {
+  color: var(--text);
+}
+.pm-check {
+  width: 12px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
