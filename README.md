@@ -11,6 +11,9 @@ games, it notices them; this does the same for what you watch.
 Windows only — the player tracking talks to Windows windows. Electron + React, one JSON file for
 data, no account, no server.
 
+**Try it in a browser: [video-library-lime-omega.vercel.app](https://video-library-lime-omega.vercel.app)**, the same interface
+as a website, opening on a demo library. See [The web build](#the-web-build).
+
 ---
 
 ## What it does
