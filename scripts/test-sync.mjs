@@ -1,31 +1,13 @@
 import assert from 'node:assert/strict'
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { pathToFileURL } from 'node:url'
+import * as sync from '../src/shared/sync.js'
 
-/* Tests src/main/sync.js without Electron.
-
-   sync.js imports ./store and ./tracker, and both reach electron, so the
-   module is loaded with those two lines rewritten — the store becomes a plain
-   object we can reset between cases, keyOf becomes its own one-liner (the real
-   one is a lowercase, and the test asserts that behaviour rather than trusting
-   the copy). The point is to test the real source, not a paraphrase of it. */
-const src = readFileSync(new URL('../src/main/sync.js', import.meta.url), 'utf-8')
-const stub = src
-  .replace(
-    "import { store } from './store'",
-    "export const store = { settings: {}, titles: [], files: [], history: [] }"
-  )
-  .replace(
-    "import { keyOf } from './tracker'",
-    "const keyOf = (name) => String(name || '').toLowerCase()"
-  )
-assert.ok(!stub.includes("from './store'"), 'store import not stubbed')
-assert.ok(!stub.includes("from './tracker'"), 'tracker import not stubbed')
-const file = join(mkdtempSync(join(tmpdir(), 'vl-sync-')), 'sync.mjs')
-writeFileSync(file, stub)
-const { store, localPayload, mergeRemote, backupReceipt } = await import(pathToFileURL(file).href)
+/* Tests the merge rules both builds share (src/shared/sync.js). They take the
+   store they work on, so the test hands them a plain object it can reset
+   between cases: the real source, no Electron needed. */
+const store = { settings: {}, titles: [], files: [], history: [] }
+const localPayload = () => sync.localPayload(store)
+const mergeRemote = (remote) => sync.mergeRemote(store, remote)
+const { backupReceipt } = sync
 
 function reset(s = {}) {
   store.settings = s.settings || {}

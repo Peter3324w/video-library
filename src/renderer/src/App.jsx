@@ -9,6 +9,7 @@ import { FavouritesView } from './views/Favourites'
 import { Settings } from './views/Settings'
 import { TitleView } from './views/Title'
 import { ReconnectBar } from './components/Folders'
+import { AuthDialog } from './components/Account'
 import { WatchView } from './views/Watch'
 
 const api = window.api
@@ -112,6 +113,7 @@ export default function App() {
       </div>
       {!WEB && <div className="drag-strip" aria-hidden="true" />}
       <WindowControls />
+      {WEB && api.account.available && <AuthDialog />}
       {toast && (
         <div className="toast-stack">
           <div className="toast">

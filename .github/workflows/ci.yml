@@ -29,3 +29,5 @@ jobs:
         run: npm run build:web
       - name: Test the file-name rules
         run: node scripts/test-matching.mjs
+      - name: Test the sync merge rules
+        run: node scripts/test-sync.mjs

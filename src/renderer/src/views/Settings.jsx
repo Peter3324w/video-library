@@ -4,6 +4,7 @@ import { AccentPicker } from '../components/AccentPicker'
 import { FoldersCard } from '../components/Folders'
 import { BackupCard } from '../components/Backup'
 import { WEB } from '../lib/platform'
+import { AccountCard } from '../components/Account'
 
 const api = window.api
 
@@ -43,6 +44,12 @@ export function Settings() {
         <div className="settings-group">
           <div className="settings-group-title">Back up and sync</div>
           <BackupCard />
+        </div>
+      )}
+      {WEB && api.account.available && (
+        <div className="settings-group">
+          <div className="settings-group-title">Account and sync</div>
+          <AccountCard />
         </div>
       )}
       <div className="settings-group">

@@ -108,6 +108,16 @@ desktop app, which is why those rules live in `src/shared/` (file names, embedde
 scan skips) with each build supplying its own way to fetch and read. `node scripts/test-matching.mjs`
 checks them.
 
+Accounts are optional (`src/web/cloud.js`, `components/Account.jsx`). The library works signed
+out; signing in, with email and password or Google, keeps a copy of the records with the account
+so another browser picks them up. It is the Drive backup with a different place to keep the copy:
+one JSON document per person, merged by the same rules, which is why `sync.js` moved to
+`src/shared/` too. The document is a row in Supabase that only its owner can read
+(`supabase/schema.sql`, row-level security). Sample films are left out of it, and when a different
+person signs in on the same browser the last one's watch records are cleared first. To switch
+accounts on, run the schema in a Supabase project and set the variables in `.env.example`; without
+them the build has no sign-in at all.
+
 The desktop app does more. The web build has no PotPlayer tracking or Drive backup, and a
 browser only plays what it can decode (MP4 and WebM reliably; MKV, HEVC and surround audio only sometimes).
 

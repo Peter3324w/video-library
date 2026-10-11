@@ -10,6 +10,8 @@ const at = (p) => resolve(dirname(fileURLToPath(import.meta.url)), p)
 export default defineConfig({
   root: at('src/web'),
   base: './',
+  // .env files sit at the repo root, not beside index.html.
+  envDir: at('.'),
   // What the renderer checks (lib/platform.js) to drop desktop-only pieces.
   define: { 'import.meta.env.VITE_TARGET': JSON.stringify('web') },
   resolve: {

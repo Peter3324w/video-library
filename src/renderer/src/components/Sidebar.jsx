@@ -16,6 +16,7 @@ import {
 import { applyTheme, formatTime, THEMES } from '../lib/util'
 import { WEB } from '../lib/platform'
 import { AppMark, BleedBg } from './common'
+import { SidebarAccount } from './Account'
 
 const api = window.api
 
@@ -162,6 +163,7 @@ export function Sidebar({ view, setView, openSettings, library, collapsed, onTog
         </div>
       </div>
 
+      {WEB && <SidebarAccount collapsed={collapsed} openSettings={openSettings} />}
       <div className={`nav-theme-wrap ${themeOpen ? 'open' : ''}`} ref={themeRef}>
         <button
           className={`nav-item nav-theme ${themeOpen ? 'active' : ''}`}

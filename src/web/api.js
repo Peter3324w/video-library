@@ -2,6 +2,7 @@ import seed from './demo-seed.json'
 import { kvGet, kvSet } from './kv'
 import { askToRead, canRead, fileOf, hasFolderInput, hasPicker, listFiles, listHandle, pickFolder } from './folders'
 import { createMatcher } from './matching'
+import { createCloud } from './cloud'
 
 /* The web build's `window.api`: the same bridge src/preload/index.js exposes,
    answered in the browser instead of by Electron's main process. The renderer
@@ -85,10 +86,13 @@ export function createWebApi() {
 
   // Fresh arrays each time, as IPC gives the desktop renderer: React compares by identity.
   const libraryPayload = () => ({ titles: [...store.titles], files: [...store.files], history: [...store.history] })
-  const changed = () => {
+  let cloud = null
+  const changed = (how) => {
     save()
     const payload = libraryPayload()
     libraryListeners.forEach((cb) => cb(payload))
+    // Signed in, a change here is owed to the account. Not the sync's own.
+    if (cloud && !(how && how.fromSync)) cloud.schedule()
   }
   const publicSettings = () => ({
     theme: store.settings.theme || 'midnight',
@@ -256,6 +260,34 @@ export function createWebApi() {
       await kvSet('handles', handles).catch(() => {})
     } else picked.set(folder.id, pick.files)
   }
+
+  /* ---------------- Account ----------------
+     What an account carries is the visitor's own records. The sample films are
+     the site's, loaded to look around with, so they stay out of it. */
+  function syncView() {
+    const files = store.files.filter((f) => !isDemo(f))
+    const mine = new Set(files.map((f) => f.id))
+    const history = store.history.filter((h) => mine.has(h.fileId))
+    const used = new Set([...files.map((f) => f.titleId), ...history.map((h) => h.titleId)])
+    const titles = store.titles.filter((t) => used.has(t.id) || !String(t.id).startsWith('demo-'))
+    return { settings: store.settings, titles, files, history }
+  }
+  /* A different person signed in on this browser. What the last one watched is
+     not theirs: files on this computer stay, as unwatched, and the rest goes. */
+  function resetRecords() {
+    const sample = new Set(store.files.filter(isDemo).map((f) => f.id))
+    store.history = store.history.filter((h) => sample.has(h.fileId))
+    store.files = store.files.filter((f) => sample.has(f.id) || f.present !== false)
+    for (const f of store.files) {
+      if (sample.has(f.id)) continue
+      f.positionMs = 0
+      f.completed = false
+      f.lastWatched = null
+    }
+    for (const t of store.titles) if (!String(t.id).startsWith('demo-')) delete t.favorite
+    pruneTitles()
+  }
+  cloud = createCloud({ getStore: () => store, syncView, resetRecords, changed })
 
   /* ---------------- Watching ----------------
      The desktop app polls PotPlayer; here the page's own <video> reports in
@@ -467,8 +499,13 @@ export function createWebApi() {
       await ready
       for (const [k, v] of Object.entries(patch || {})) if (SETTING_KEYS.has(k)) store.settings[k] = v
       save()
+      cloud.schedule()
       return publicSettings()
     },
+
+    // Web only: signing in and syncing (cloud.js). `account.available` is
+    // false in a build with no Supabase project configured.
+    account: cloud,
 
     openExternal: async (url) => {
       if (/^https?:\/\//i.test(String(url))) window.open(url, '_blank', 'noopener')
