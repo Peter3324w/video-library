@@ -89,8 +89,8 @@ export function FoldersCard() {
   useEffect(() => {
     api.getFolders().then((f) => setFolders(f || []))
   }, [])
-  // Web: the demo library is listed as a folder, and can be brought back.
-  const hasDemo = folders.includes('Demo library')
+  // Web: the sample films, once loaded, are listed as a folder like any other.
+  const hasDemo = folders.includes('Sample films')
   const run = async (fn) => {
     setBusy(true)
     setMsg('Scanning…')
@@ -116,7 +116,7 @@ export function FoldersCard() {
             {!WEB
               ? 'Where your movies and shows live. Subfolders are included. Scanned every time the app starts, so new downloads show up on their own.'
               : !api.canAddFolder
-                ? 'This browser can’t open a folder, so the library here is the demo one. On a computer you can add your own.'
+                ? 'This browser can’t open a folder, so there is nothing of yours to add here. On a computer you can add your own; here you can load the sample films to look around.'
                 : api.keepsFolders
                   ? 'Add a folder of movies or shows from this computer. Nothing is uploaded: the files are read and played right here in the browser. Subfolders are included.'
                   : 'Add a folder of movies or shows from this computer. Nothing is uploaded: the files are read and played right here in the browser. This browser forgets the folder when the tab closes, so it is picked again next visit; Chrome and Edge remember it.'}
@@ -155,7 +155,7 @@ export function FoldersCard() {
           )}
           {WEB && !hasDemo && (
             <button className="btn-soft" onClick={async () => setFolders(await api.restoreDemo())} disabled={busy}>
-              Bring back the demo library
+              Load sample films
             </button>
           )}
           {msg && <span className="page-sub">{msg}</span>}

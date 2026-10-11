@@ -1,10 +1,10 @@
-// Builds src/web/demo-seed.json, the library the web build opens with.
+// Builds src/web/demo-seed.json, the sample films the web build can load.
 //
 //   node scripts/build-demo-seed.mjs
 //
-// A visitor has no folder to point the app at, so the web build starts on a
-// library that is already lived in: things half watched, things finished,
-// things deleted. Everything in it is free to stream: the Blender open
+// The web build starts empty. A visitor with no folder to point it at can load
+// these instead: a library that is already lived in, with things half watched,
+// things finished, things deleted. Everything in it is free to stream: the Blender open
 // movies and Pioneer One are Creative Commons, the rest are public domain,
 // all hosted on archive.org. Art and metadata come from Cinemeta, exactly as
 // they do for a scanned file.
@@ -222,7 +222,7 @@ function addFile({ id, titleId, fileName, folder, src, durationMs, added, watch,
 for (const mv of MOVIES) {
   const t = title(await meta('movie', mv.imdb), 'movie', mv.added, mv.favorite)
   titles.push(t)
-  addFile({ ...mv, id: `demo-file-${mv.imdb}`, titleId: t.id, folder: 'Demo library/Movies' })
+  addFile({ ...mv, id: `demo-file-${mv.imdb}`, titleId: t.id, folder: 'Sample films/Movies' })
   console.log('movie ', t.name, mv.gone ? '(not on this PC)' : '')
 }
 
@@ -234,7 +234,7 @@ for (const e of SHOW.episodes) {
     id: `demo-file-${SHOW.imdb}-s1e${e.ep}`,
     titleId: show.id,
     fileName: `Pioneer.One.S01E${n}.720p.x264-VODO.mp4`,
-    folder: 'Demo library/TV/Pioneer One',
+    folder: 'Sample films/TV/Pioneer One',
     src: IA(e.item, e.file),
     durationMs: e.durationMs,
     added: SHOW.added,

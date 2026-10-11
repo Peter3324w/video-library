@@ -523,7 +523,7 @@
   "files": [
     {
       "id": "demo-file-tt1727587",
-      "path": "Demo library/Movies/Sintel.2010.1080p.BluRay.x264.mp4",
+      "path": "Sample films/Movies/Sintel.2010.1080p.BluRay.x264.mp4",
       "fileName": "Sintel.2010.1080p.BluRay.x264.mp4",
       "titleId": "demo-tt1727587",
       "season": null,
@@ -538,7 +538,7 @@
     },
     {
       "id": "demo-file-tt1254207",
-      "path": "Demo library/Movies/Big.Buck.Bunny.2008.720p.mp4",
+      "path": "Sample films/Movies/Big.Buck.Bunny.2008.720p.mp4",
       "fileName": "Big.Buck.Bunny.2008.720p.mp4",
       "titleId": "demo-tt1254207",
       "season": null,
@@ -553,7 +553,7 @@
     },
     {
       "id": "demo-file-tt0032599",
-      "path": "Demo library/Movies/His.Girl.Friday.1940.720p.WEB-DL.mp4",
+      "path": "Sample films/Movies/His.Girl.Friday.1940.720p.WEB-DL.mp4",
       "fileName": "His.Girl.Friday.1940.720p.WEB-DL.mp4",
       "titleId": "demo-tt0032599",
       "season": null,
@@ -568,7 +568,7 @@
     },
     {
       "id": "demo-file-tt2285752",
-      "path": "Demo library/Movies/Tears.of.Steel.2012.1080p.mp4",
+      "path": "Sample films/Movies/Tears.of.Steel.2012.1080p.mp4",
       "fileName": "Tears.of.Steel.2012.1080p.mp4",
       "titleId": "demo-tt2285752",
       "season": null,
@@ -583,7 +583,7 @@
     },
     {
       "id": "demo-file-tt0807840",
-      "path": "Demo library/Movies/Elephants.Dream.2006.1080p.mp4",
+      "path": "Sample films/Movies/Elephants.Dream.2006.1080p.mp4",
       "fileName": "Elephants.Dream.2006.1080p.mp4",
       "titleId": "demo-tt0807840",
       "season": null,
@@ -598,7 +598,7 @@
     },
     {
       "id": "demo-file-tt1172203",
-      "path": "Demo library/Movies/Sita.Sings.the.Blues.2008.DVDRip.mp4",
+      "path": "Sample films/Movies/Sita.Sings.the.Blues.2008.DVDRip.mp4",
       "fileName": "Sita.Sings.the.Blues.2008.DVDRip.mp4",
       "titleId": "demo-tt1172203",
       "season": null,
@@ -613,7 +613,7 @@
     },
     {
       "id": "demo-file-tt0017925",
-      "path": "Demo library/Movies/The.General.1926.720p.BluRay.mp4",
+      "path": "Sample films/Movies/The.General.1926.720p.BluRay.mp4",
       "fileName": "The.General.1926.720p.BluRay.mp4",
       "titleId": "demo-tt0017925",
       "season": null,
@@ -628,7 +628,7 @@
     },
     {
       "id": "demo-file-tt0063350",
-      "path": "Demo library/Movies/Night.of.the.Living.Dead.1968.1080p.BluRay.x264.mkv",
+      "path": "Sample films/Movies/Night.of.the.Living.Dead.1968.1080p.BluRay.x264.mkv",
       "fileName": "Night.of.the.Living.Dead.1968.1080p.BluRay.x264.mkv",
       "titleId": "demo-tt0063350",
       "season": null,
@@ -643,7 +643,7 @@
     },
     {
       "id": "demo-file-tt0056923",
-      "path": "Demo library/Movies/Charade.1963.1080p.BluRay.x264.mkv",
+      "path": "Sample films/Movies/Charade.1963.1080p.BluRay.x264.mkv",
       "fileName": "Charade.1963.1080p.BluRay.x264.mkv",
       "titleId": "demo-tt0056923",
       "season": null,
@@ -658,7 +658,7 @@
     },
     {
       "id": "demo-file-tt0013442",
-      "path": "Demo library/Movies/Nosferatu.1922.REMASTERED.720p.mkv",
+      "path": "Sample films/Movies/Nosferatu.1922.REMASTERED.720p.mkv",
       "fileName": "Nosferatu.1922.REMASTERED.720p.mkv",
       "titleId": "demo-tt0013442",
       "season": null,
@@ -673,7 +673,7 @@
     },
     {
       "id": "demo-file-tt1748166-s1e1",
-      "path": "Demo library/TV/Pioneer One/Pioneer.One.S01E01.720p.x264-VODO.mp4",
+      "path": "Sample films/TV/Pioneer One/Pioneer.One.S01E01.720p.x264-VODO.mp4",
       "fileName": "Pioneer.One.S01E01.720p.x264-VODO.mp4",
       "titleId": "demo-tt1748166",
       "season": 1,
@@ -688,7 +688,7 @@
     },
     {
       "id": "demo-file-tt1748166-s1e2",
-      "path": "Demo library/TV/Pioneer One/Pioneer.One.S01E02.720p.x264-VODO.mp4",
+      "path": "Sample films/TV/Pioneer One/Pioneer.One.S01E02.720p.x264-VODO.mp4",
       "fileName": "Pioneer.One.S01E02.720p.x264-VODO.mp4",
       "titleId": "demo-tt1748166",
       "season": 1,
@@ -703,7 +703,7 @@
     },
     {
       "id": "demo-file-tt1748166-s1e3",
-      "path": "Demo library/TV/Pioneer One/Pioneer.One.S01E03.720p.x264-VODO.mp4",
+      "path": "Sample films/TV/Pioneer One/Pioneer.One.S01E03.720p.x264-VODO.mp4",
       "fileName": "Pioneer.One.S01E03.720p.x264-VODO.mp4",
       "titleId": "demo-tt1748166",
       "season": 1,
@@ -718,7 +718,7 @@
     },
     {
       "id": "demo-file-tt1748166-s1e4",
-      "path": "Demo library/TV/Pioneer One/Pioneer.One.S01E04.720p.x264-VODO.mp4",
+      "path": "Sample films/TV/Pioneer One/Pioneer.One.S01E04.720p.x264-VODO.mp4",
       "fileName": "Pioneer.One.S01E04.720p.x264-VODO.mp4",
       "titleId": "demo-tt1748166",
       "season": 1,
@@ -733,7 +733,7 @@
     },
     {
       "id": "demo-file-tt1748166-s1e5",
-      "path": "Demo library/TV/Pioneer One/Pioneer.One.S01E05.720p.x264-VODO.mp4",
+      "path": "Sample films/TV/Pioneer One/Pioneer.One.S01E05.720p.x264-VODO.mp4",
       "fileName": "Pioneer.One.S01E05.720p.x264-VODO.mp4",
       "titleId": "demo-tt1748166",
       "season": 1,
@@ -748,7 +748,7 @@
     },
     {
       "id": "demo-file-tt1748166-s1e6",
-      "path": "Demo library/TV/Pioneer One/Pioneer.One.S01E06.720p.x264-VODO.mp4",
+      "path": "Sample films/TV/Pioneer One/Pioneer.One.S01E06.720p.x264-VODO.mp4",
       "fileName": "Pioneer.One.S01E06.720p.x264-VODO.mp4",
       "titleId": "demo-tt1748166",
       "season": 1,

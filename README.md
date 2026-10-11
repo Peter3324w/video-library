@@ -12,7 +12,7 @@ Windows only — the player tracking talks to Windows windows. Electron + React,
 data, no account, no server.
 
 **Try it in a browser: [video-library-lime-omega.vercel.app](https://video-library-lime-omega.vercel.app)**, the same interface
-as a website, opening on a demo library. See [The web build](#the-web-build).
+as a website. Add a folder of your own and it plays there. See [The web build](#the-web-build).
 
 ---
 
@@ -90,9 +90,10 @@ npm run build:web   # static site in dist-web/
 
 It is the desktop renderer (`src/renderer/src`) unchanged, with `src/web/api.js` standing in for
 Electron's preload bridge: the same `window.api` methods, answered in the browser, with the library
-kept in IndexedDB instead of `data.json`. A first visit opens on a demo library
-(`src/web/demo-seed.json`, rebuilt with `node scripts/build-demo-seed.mjs`) of Creative Commons and
-public-domain films hosted on archive.org.
+kept in IndexedDB instead of `data.json`. The library starts empty, as the desktop app does.
+Settings can load a set of sample films (`src/web/demo-seed.json`, rebuilt with
+`node scripts/build-demo-seed.mjs`): Creative Commons and public-domain films hosted on archive.org,
+for a visitor with nothing of their own to add.
 
 On the web the page is the player (`views/Watch.jsx`): the `<video>` element reports its own
 position, and the bridge keeps the records the PotPlayer tracker would, by the same rules: a resume

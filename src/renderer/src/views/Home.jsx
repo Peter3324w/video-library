@@ -82,12 +82,19 @@ export function HomeView({ library, onPlay, onFeatured, onNav, onOpenTitle }) {
           </div>
           <h2>Welcome to Video Library</h2>
           <p>
-            {WEB
+            {WEB && !api.canAddFolder
+              ? 'This browser can’t open a folder from your device, so there is nothing of yours to add here. On a computer, add a folder of movies or shows and everything gets its cover art, plays in the browser and is remembered. Here you can load some sample films to look around.'
+              : WEB
               ? 'Add a folder of movies or shows from this computer. Everything gets its cover art, plays right here in the browser, and is remembered, so Resume picks up where you stopped. Nothing is uploaded.'
               : 'Add the folders where your movies and shows live. Everything gets its cover art, and anything you play in PotPlayer is remembered — so Resume picks up where you stopped.'}
           </p>
           <div className="empty-actions">
             <AddFolderButton />
+            {WEB && !api.canAddFolder && (
+              <button className="btn-primary" onClick={() => api.restoreDemo()}>
+                Load sample films
+              </button>
+            )}
           </div>
         </div>
       </div>

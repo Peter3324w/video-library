@@ -8,15 +8,20 @@ import { createMatcher } from './matching'
    is shared and can't tell which one it is talking to.
 
    Where the desktop app keeps data.json in userData, this keeps the same three
-   lists (titles, files, history) in IndexedDB. A first visit starts on the
-   demo library from demo-seed.json; folders the visitor adds are read in
-   place (folders.js) and matched to titles by the desktop's rules. */
+   lists (titles, files, history) in IndexedDB. The library starts empty, as
+   the desktop app does; folders the visitor adds are read in place
+   (folders.js) and matched to titles by the desktop's rules. */
 
-const SEED_VERSION = 1 // bump to hand returning visitors a fresh demo library
-const DEMO = 'Demo library'
-const isDemo = (f) => !!f.path && f.path.startsWith(`${DEMO}/`)
+/* Version 1 opened on the sample films. From 2 the library starts empty, so a
+   store saved by version 1 has its samples taken out once (see `ready`). */
+const STORE_VERSION = 2
+const DEMO = 'Sample films'
+const isDemo = (f) => !!f.path && (f.path.startsWith(`${DEMO}/`) || f.path.startsWith('Demo library/'))
 
-/* ---------------- The demo library ---------------- */
+/* ---------------- Sample films ----------------
+   Not part of a new library. A visitor with nothing of their own to add can
+   load them (Settings, or the empty Home page on a browser that can't open a
+   folder): free films from archive.org, with some watch history to look at. */
 // Written relative to the day the seed was generated; moved to today, so
 // "Yesterday" still reads yesterday however old the build is.
 const TIME_KEYS = ['addedAt', 'lastWatched', 'missingAt', 'start', 'end']
@@ -30,11 +35,13 @@ function demoLists() {
     })
   return { titles: moved(seed.titles), files: moved(seed.files), history: moved(seed.history) }
 }
-const demoStore = () => ({
+const emptyStore = () => ({
   version: 1,
-  seedVersion: SEED_VERSION,
+  seedVersion: STORE_VERSION,
   settings: { theme: 'midnight', accent: null, accentRecents: [], folders: [] },
-  ...demoLists()
+  titles: [],
+  files: [],
+  history: []
 })
 
 // The desktop tracker's rules (src/main/tracker.js), kept the same here.
@@ -44,16 +51,31 @@ const DONE_FRACTION = 0.85 // past this, the credits are rolling
 const isDone = (posMs, durMs) => durMs > 0 && posMs >= durMs * DONE_FRACTION
 
 export function createWebApi() {
-  let store = demoStore()
+  let store = emptyStore()
   const libraryListeners = new Set()
 
+  // The sample films and everything recorded against them.
+  function removeDemo() {
+    const gone = new Set(store.files.filter(isDemo).map((f) => f.id))
+    store.files = store.files.filter((f) => !gone.has(f.id))
+    store.history = store.history.filter((h) => !gone.has(h.fileId))
+    const used = new Set([...store.files.map((f) => f.titleId), ...store.history.map((h) => h.titleId)])
+    store.titles = store.titles.filter((t) => used.has(t.id))
+  }
+
   /* Private windows and blocked site data make IndexedDB throw. The library
-     then lives for the visit only: still a working demo. */
+     then lives for the visit only. */
   const ready = (async () => {
     try {
       const saved = await kvGet('store')
-      if (saved && saved.seedVersion === SEED_VERSION && Array.isArray(saved.titles)) store = saved
-      else await kvSet('store', store)
+      if (saved && Array.isArray(saved.titles) && Array.isArray(saved.files) && Array.isArray(saved.history)) {
+        store = saved
+        if (store.seedVersion !== STORE_VERSION) {
+          removeDemo()
+          store.seedVersion = STORE_VERSION
+        }
+      }
+      await kvSet('store', store)
     } catch (e) {
       console.warn('[store] not persisted this visit', e)
     }
@@ -301,13 +323,8 @@ export function createWebApi() {
     },
     removeFolder: async (name) => {
       await booted
-      if (name === DEMO) {
-        const gone = new Set(store.files.filter(isDemo).map((f) => f.id))
-        store.files = store.files.filter((f) => !gone.has(f.id))
-        store.history = store.history.filter((h) => !gone.has(h.fileId))
-        const used = new Set([...store.files.map((f) => f.titleId), ...store.history.map((h) => h.titleId)])
-        store.titles = store.titles.filter((t) => used.has(t.id))
-      } else {
+      if (name === DEMO) removeDemo()
+      else {
         const folder = folders().find((f) => f.name === name)
         if (folder) {
           store.settings.folders = folders().filter((f) => f !== folder)
