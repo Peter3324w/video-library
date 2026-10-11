@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { applyAppearance } from './lib/util'
+import { WEB } from './lib/platform'
 import { Sidebar, WindowControls, LIBRARIES } from './components/Sidebar'
 import { HomeView } from './views/Home'
 import { LibraryView } from './views/Library'
@@ -7,6 +8,8 @@ import { HistoryView } from './views/History'
 import { FavouritesView } from './views/Favourites'
 import { Settings } from './views/Settings'
 import { TitleView } from './views/Title'
+import { ReconnectBar } from './components/Folders'
+import { WatchView } from './views/Watch'
 
 const api = window.api
 const EMPTY_LIBRARY = { titles: [], files: [], history: [] }
@@ -34,11 +37,16 @@ export default function App() {
   /* A title's page. Back returns to whichever page opened it, so it's held
      beside the view rather than being a view of its own in the sidebar. */
   const [openTitle, setOpenTitle] = useState(null)
+  /* Web build: the page is the player. What's playing sits over whatever page
+     started it, so Back returns there. */
+  const [watching, setWatching] = useState(null)
   const showTitle = (id) => {
+    setWatching(null)
     setOpenTitle(id)
     document.querySelector('.content')?.scrollTo(0, 0)
   }
   const nav = (v) => {
+    setWatching(null)
     setOpenTitle(null)
     setView(v)
   }
@@ -54,6 +62,11 @@ export default function App() {
     return () => clearTimeout(t)
   }, [toast])
   const play = async (file, opts) => {
+    if (WEB) {
+      setWatching({ fileId: file.id, fromStart: !!(opts && opts.fromStart), at: Date.now() })
+      document.querySelector('.content')?.scrollTo(0, 0)
+      return
+    }
     const r = await api.play(file.id, opts)
     if (r && !r.ok) setToast({ title: 'Can’t play that', body: r.error })
   }
@@ -71,7 +84,18 @@ export default function App() {
           bgImg={sidebarBg}
         />
         <main className="content">
-          {openTitle ? (
+          {WEB && <ReconnectBar library={library} />}
+          {watching ? (
+            <WatchView
+              key={`${watching.fileId}:${watching.at}`}
+              fileId={watching.fileId}
+              fromStart={watching.fromStart}
+              library={library}
+              onPlay={play}
+              onBack={() => setWatching(null)}
+              onOpenTitle={showTitle}
+            />
+          ) : openTitle ? (
             <TitleView titleId={openTitle} library={library} onPlay={play} onBack={() => setOpenTitle(null)} />
           ) : (
             <>
@@ -86,7 +110,7 @@ export default function App() {
           )}
         </main>
       </div>
-      <div className="drag-strip" aria-hidden="true" />
+      {!WEB && <div className="drag-strip" aria-hidden="true" />}
       <WindowControls />
       {toast && (
         <div className="toast-stack">

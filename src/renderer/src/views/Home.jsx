@@ -4,6 +4,7 @@ import { AddMenu, BleedBg } from '../components/common'
 import { Hero } from '../components/Hero'
 import { TitleCard } from '../components/TitleCard'
 import { AddFolderButton } from '../components/Folders'
+import { WEB } from '../lib/platform'
 import { episodeLabel, itemName, leftLabel, nextFileFor, progressOf, titleOnDisk, watchItems } from '../lib/media'
 
 const api = window.api
@@ -81,8 +82,9 @@ export function HomeView({ library, onPlay, onFeatured, onNav, onOpenTitle }) {
           </div>
           <h2>Welcome to Video Library</h2>
           <p>
-            Add the folders where your movies and shows live. Everything gets its cover art, and
-            anything you play in PotPlayer is remembered — so Resume picks up where you stopped.
+            {WEB
+              ? 'Add a folder of movies or shows from this computer. Everything gets its cover art, plays right here in the browser, and is remembered, so Resume picks up where you stopped. Nothing is uploaded.'
+              : 'Add the folders where your movies and shows live. Everything gets its cover art, and anything you play in PotPlayer is remembered — so Resume picks up where you stopped.'}
           </p>
           <div className="empty-actions">
             <AddFolderButton />
@@ -110,7 +112,11 @@ export function HomeView({ library, onPlay, onFeatured, onNav, onOpenTitle }) {
             <div className="section-head">
               <h3>Continue watching</h3>
               <div className="head-actions">
-                <AddMenu onAddFile={() => api.addFiles()} onScan={() => api.addFolder()} />
+                {WEB ? (
+                  <AddFolderButton label="Add your own folder" />
+                ) : (
+                  <AddMenu onAddFile={() => api.addFiles()} onScan={() => api.addFolder()} />
+                )}
               </div>
             </div>
             <div className="poster-grid">

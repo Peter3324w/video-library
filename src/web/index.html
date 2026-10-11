@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Video Library: a library for the movies and shows you download. Resume where you stopped, watch history, cover art."
+    />
+    <link rel="icon" type="image/png" href="./icon.png" />
+    <title>Video Library</title>
+    <style>
+      /* Same first-frame splash as the desktop app: black until React mounts. */
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #000;
+        transition: opacity 0.35s ease;
+      }
+      #boot-splash.boot-hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      html,
+      body {
+        background: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="boot-splash"></div>
+    <div id="root"></div>
+    <script type="module" src="./main.jsx"></script>
+  </body>
+</html>

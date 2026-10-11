@@ -6,6 +6,8 @@ import {
   Trash as IcTrash
 } from 'iconsax-react'
 
+import { WEB } from '../lib/platform'
+
 const api = window.api
 
 // "Found 106 videos · 2 new · 3 gone", leaving out whatever is zero.
@@ -60,6 +62,7 @@ export function RescanButton() {
 // "Add a folder" — used on the empty screens, where it is the whole next step.
 export function AddFolderButton({ label = 'Add a folder' }) {
   const [busy, setBusy] = useState(false)
+  if (WEB && !api.canAddFolder) return null // a phone browser can't hand over a folder
   return (
     <button
       className="btn-primary"
@@ -86,6 +89,8 @@ export function FoldersCard() {
   useEffect(() => {
     api.getFolders().then((f) => setFolders(f || []))
   }, [])
+  // Web: the demo library is listed as a folder, and can be brought back.
+  const hasDemo = folders.includes('Demo library')
   const run = async (fn) => {
     setBusy(true)
     setMsg('Scanning…')
@@ -108,8 +113,13 @@ export function FoldersCard() {
         <div>
           <div className="setting-title">Library folders</div>
           <div className="page-sub">
-            Where your movies and shows live. Subfolders are included. Scanned every time the app
-            starts, so new downloads show up on their own.
+            {!WEB
+              ? 'Where your movies and shows live. Subfolders are included. Scanned every time the app starts, so new downloads show up on their own.'
+              : !api.canAddFolder
+                ? 'This browser can’t open a folder, so the library here is the demo one. On a computer you can add your own.'
+                : api.keepsFolders
+                  ? 'Add a folder of movies or shows from this computer. Nothing is uploaded: the files are read and played right here in the browser. Subfolders are included.'
+                  : 'Add a folder of movies or shows from this computer. Nothing is uploaded: the files are read and played right here in the browser. This browser forgets the folder when the tab closes, so it is picked again next visit; Chrome and Edge remember it.'}
           </div>
         </div>
         {folders.length > 0 && (
@@ -133,17 +143,72 @@ export function FoldersCard() {
           </div>
         )}
         <div className="vl-folder-actions">
-          <button className="btn-primary" onClick={add} disabled={busy}>
-            <IcFolderAdd size={16} color="currentColor" variant="Linear" /> Add folder
-          </button>
+          {(!WEB || api.canAddFolder) && (
+            <button className="btn-primary" onClick={add} disabled={busy}>
+              <IcFolderAdd size={16} color="currentColor" variant="Linear" /> Add folder
+            </button>
+          )}
           {folders.length > 0 && (
             <button className="btn-soft" onClick={() => run(() => api.rescan())} disabled={busy}>
               <IcRefresh size={16} color="currentColor" variant="Linear" /> Rescan
             </button>
           )}
+          {WEB && !hasDemo && (
+            <button className="btn-soft" onClick={async () => setFolders(await api.restoreDemo())} disabled={busy}>
+              Bring back the demo library
+            </button>
+          )}
           {msg && <span className="page-sub">{msg}</span>}
         </div>
       </div>
+    </div>
+  )
+}
+
+/* Web only. Folders added on an earlier visit come back unreadable: the
+   browser wants a click before it hands them over again. Until then their
+   titles sit on the "Not on this PC" shelf, so this says why and fixes it. */
+export function ReconnectBar({ library }) {
+  const [names, setNames] = useState([])
+  const [busy, setBusy] = useState(false)
+  // Asked again whenever the library changes: a scan is what changes the answer.
+  useEffect(() => {
+    let alive = true
+    api.foldersNeedingAccess().then((n) => alive && setNames(n || []))
+    return () => {
+      alive = false
+    }
+  }, [library])
+  if (!names.length) return null
+  return (
+    <div className="vl-reconnect">
+      <IcFolder size={18} color="currentColor" variant="Linear" />
+      <span className="vl-reconnect-text">
+        {names.length === 1 ? (
+          <>
+            Your folder <b>{names[0]}</b> needs reconnecting.
+          </>
+        ) : (
+          <>
+            <b>{names.length} of your folders</b> need reconnecting.
+          </>
+        )}{' '}
+        A browser asks again each visit before a page can read your files.
+      </span>
+      <button
+        className="btn-primary sm"
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true)
+          try {
+            await api.reconnectFolders()
+          } finally {
+            setBusy(false)
+          }
+        }}
+      >
+        {busy ? 'Reconnecting…' : 'Reconnect'}
+      </button>
     </div>
   )
 }

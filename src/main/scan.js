@@ -2,6 +2,7 @@ import { promises as fsp, existsSync } from 'fs'
 import { basename, join } from 'path'
 import { store, saveStore } from './store'
 import { fileFor } from './tracker'
+import { MAX_DEPTH, MIN_BYTES, SKIP_DIR, SKIP_FILE, VIDEO } from '../shared/scan-rules'
 
 /* Folder scanning. Walks every library folder for video files and gives each
    one a record with its full path — which is what Resume needs, since
@@ -9,17 +10,6 @@ import { fileFor } from './tracker'
 
    A file already known by name (watched before the folder was added) gets its
    path filled in, so its history and resume position carry straight over. */
-
-const VIDEO = /\.(mkv|mp4|m4v|avi|mov|wmv|webm|ts|m2ts|flv|mpg|mpeg|ogv|3gp)$/i
-// Samples and extras aren't episodes; they'd each become a card.
-const SKIP_FILE = /(^|[\s._-])(sample|trailer)([\s._-]|$)/i
-// Windows' own screen-recording folders hold captures, not shows: a 27 MB
-// "After.mp4" in there would otherwise become the film After (2019).
-const SKIP_DIR =
-  /^(\$recycle\.bin|system volume information|node_modules|\..*|samples?|extras?|featurettes?|captures|screen recordings|camera roll|saved pictures|screenshots)$/i
-const MAX_DEPTH = 6
-// Under this it's a clip or a sample, not an episode (a 3 MB "m2-res_720p.mp4").
-const MIN_BYTES = 15 * 1024 * 1024
 
 async function walk(dir, depth, out) {
   let entries

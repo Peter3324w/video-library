@@ -1,4 +1,5 @@
 // Shared pure helpers used across multiple views.
+import { WEB } from './platform'
 
 export function formatTime(totalSeconds) {
   const s = Math.floor(totalSeconds || 0)
@@ -27,8 +28,9 @@ export function formatClock(totalSeconds) {
    daylight-saving change is 23 or 25 hours long. */
 /* Art goes through main's disk cache (src/main/artcache.js): downloaded once,
    then served from disk forever after, whatever the connection is doing. */
+// The web build has no main process; the browser's own cache does the job.
 export const artUrl = (src) =>
-  src && /^https?:\/\//i.test(src) ? `vlart://art/?u=${encodeURIComponent(src)}` : src
+  !WEB && src && /^https?:\/\//i.test(src) ? `vlart://art/?u=${encodeURIComponent(src)}` : src
 
 export function relativeDay(ts) {
   if (!ts) return 'Never'

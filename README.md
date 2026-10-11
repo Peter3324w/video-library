@@ -75,6 +75,38 @@ Dev runs keep their data in `%APPDATA%\video-library-dev\` — separate from an 
 tinkering never touches the real library. Drive backup in dev writes `videolibrary-dev.json`, not
 the real backup file, for the same reason.
 
+### The web build
+
+The same interface also builds as a website, for people who want to look at the app without
+installing it:
+
+```powershell
+npm run dev:web     # http://localhost:5183
+npm run build:web   # static site in dist-web/
+```
+
+It is the desktop renderer (`src/renderer/src`) unchanged, with `src/web/api.js` standing in for
+Electron's preload bridge: the same `window.api` methods, answered in the browser, with the library
+kept in IndexedDB instead of `data.json`. A first visit opens on a demo library
+(`src/web/demo-seed.json`, rebuilt with `node scripts/build-demo-seed.mjs`) of Creative Commons and
+public-domain films hosted on archive.org.
+
+On the web the page is the player (`views/Watch.jsx`): the `<video>` element reports its own
+position, and the bridge keeps the records the PotPlayer tracker would, by the same rules: a resume
+position saved every 15 seconds, finished at 85%, a history entry for anything watched longer than
+ten seconds.
+
+A visitor can add a folder of their own (`src/web/folders.js`). Nothing is uploaded: the files are
+read and played in the browser. Chrome and Edge hand the page a folder handle it can keep, so the
+folder is still there next visit after one click to allow it again; Firefox and Safari hand over a
+file list that lasts until the tab closes. Files are matched to titles by the same rules as the
+desktop app, which is why those rules live in `src/shared/` (file names, embedded titles, what a
+scan skips) with each build supplying its own way to fetch and read. `node scripts/test-matching.mjs`
+checks them.
+
+The desktop app does more. The web build has no PotPlayer tracking or Drive backup, and a
+browser only plays what it can decode (MP4 and WebM reliably; MKV, HEVC and surround audio only sometimes).
+
 ---
 
 ## Why it is built this way

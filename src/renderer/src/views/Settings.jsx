@@ -3,6 +3,7 @@ import { applyTheme, nextAccentRecents, THEMES } from '../lib/util'
 import { AccentPicker } from '../components/AccentPicker'
 import { FoldersCard } from '../components/Folders'
 import { BackupCard } from '../components/Backup'
+import { WEB } from '../lib/platform'
 
 const api = window.api
 
@@ -31,17 +32,19 @@ export function Settings() {
       <header className="page-head">
         <div>
           <h1>Settings</h1>
-          <p className="page-sub">How the library looks and which player it uses</p>
+          <p className="page-sub">{WEB ? 'How the library looks' : 'How the library looks and which player it uses'}</p>
         </div>
       </header>
       <div className="settings-group">
         <div className="settings-group-title">Library</div>
         <FoldersCard />
       </div>
-      <div className="settings-group">
-        <div className="settings-group-title">Back up and sync</div>
-        <BackupCard />
-      </div>
+      {!WEB && (
+        <div className="settings-group">
+          <div className="settings-group-title">Back up and sync</div>
+          <BackupCard />
+        </div>
+      )}
       <div className="settings-group">
         <div className="settings-group-title">Appearance</div>
         <div className="settings-card">

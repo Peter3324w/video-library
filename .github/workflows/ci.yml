@@ -25,3 +25,7 @@ jobs:
       - run: cp src/main/google-config.example.js src/main/google-config.js
       - name: Build
         run: npm run build
+      - name: Build the web version
+        run: npm run build:web
+      - name: Test the file-name rules
+        run: node scripts/test-matching.mjs

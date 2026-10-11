@@ -13,6 +13,7 @@ import { artUrl, coverGradient, relativeDay } from '../lib/util'
 import { episodeLabel, nextFileFor } from '../lib/media'
 import { Art, Dropdown } from '../components/common'
 import { cleanName, pct } from '../components/rows'
+import { WEB } from '../lib/platform'
 
 const api = window.api
 
@@ -175,12 +176,14 @@ export function TitleView({ titleId, library, onPlay, onBack }) {
               onClick={() => api.openExternal(`https://www.youtube.com/watch?v=${trailer}`)}
             />
             <Tool Icon={IcInfo} label="More info" on={moreOpen} variant="Linear" onClick={() => setMoreOpen((o) => !o)} />
-            <Tool
-              Icon={IcFolder}
-              label="Open folder"
-              disabled={!next}
-              onClick={() => api.revealFile(next.id)}
-            />
+            {!WEB && (
+              <Tool
+                Icon={IcFolder}
+                label="Open folder"
+                disabled={!next}
+                onClick={() => api.revealFile(next.id)}
+              />
+            )}
           </div>
         </div>
 

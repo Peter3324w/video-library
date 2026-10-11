@@ -1,0 +1,162 @@
+/* Rules only the web build loads (src/web/main.jsx). */
+
+/* ---------------- Watch page ----------------
+   The player and what it is on the left, what's next on the right. Episode
+   rows are the title page's own (.vl-ep), made smaller to fit the rail. */
+.vl-watch {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: start;
+}
+.vl-watch-main {
+  min-width: 0;
+}
+.vl-watch-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 220px);
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--stroke-soft);
+}
+.vl-watch-stage video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #000;
+}
+/* Sits over the stage: the "didn't play" message and the Up next card. */
+.vl-watch-note {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  text-align: center;
+  background: rgb(0 0 0 / 0.78);
+  color: #fff;
+}
+.vl-watch-note h3 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.vl-watch-note p {
+  max-width: 460px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.66);
+}
+.vl-watch-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.6);
+}
+.vl-watch-note-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.vl-watch-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 18px;
+}
+.vl-watch-back {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--stroke);
+  background: rgb(var(--wash-rgb) / 0.05);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.vl-watch-back:hover {
+  background: rgb(var(--wash-rgb) / 0.12);
+}
+.vl-watch-heading {
+  flex: 1;
+  min-width: 0;
+}
+.vl-watch-name {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.vl-watch-ep {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.vl-watch-main .vl-title-desc {
+  margin-left: 52px; /* under the heading, past the back button */
+}
+
+.vl-watch-rail .section-head {
+  margin-bottom: 8px;
+}
+.vl-watch-rail .vl-ep {
+  gap: 12px;
+  padding: 8px;
+}
+.vl-watch-rail .vl-ep-thumb {
+  width: 132px;
+}
+.vl-watch-rail .vl-ep-title {
+  font-size: 13.5px;
+}
+
+/* Narrow window: the rail drops under the player. */
+@media (max-width: 1180px) {
+  .vl-watch {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------------- Reconnect bar ----------------
+   Pinned to the top of the page while a folder from an earlier visit waits
+   for the browser's go-ahead. */
+.vl-reconnect {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--card);
+  border-bottom: 1px solid var(--stroke);
+}
+.vl-reconnect > svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.vl-reconnect-text {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.vl-reconnect-text b {
+  color: var(--text);
+  font-weight: 600;
+}

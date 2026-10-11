@@ -14,12 +14,14 @@ import {
   TickCircle as IcTick
 } from 'iconsax-react'
 import { applyTheme, formatTime, THEMES } from '../lib/util'
+import { WEB } from '../lib/platform'
 import { AppMark, BleedBg } from './common'
 
 const api = window.api
 
 /* Window controls float over the top-right (over the hero artwork on Home) */
 export function WindowControls() {
+  if (WEB) return null // a browser tab has its own
   return (
     <div className="window-controls">
       <button className="win-btn" onClick={() => api.win.minimize()} aria-label="Minimize">
